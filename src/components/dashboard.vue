@@ -5,11 +5,12 @@
         <!-- search component -->        
         <search :if-reset-input="ifResetInput" @change-if-reset-input="changeIfResetInput"
           @search="setSearch"></search>
+
+        <span class="bt-switch-com" @click="changeCom">switch component</span>
+          
         <!-- create new element component -->
         <create-new :elem-keys-type="elemKeysType" @add-item="setAddItem"></create-new>
       </div>  
-
-      <span class="bt-switch-com" @click="changeCom">switch component</span>
 
       <!-- lists component -->
       <keep-alive>
@@ -211,12 +212,11 @@ export default {
 }
 .bt-switch-com {
   position: absolute;
-  margin-top: -1.7rem;
+  margin-left: 200px;  
   background: #fbf265;
   color: white;
   padding: 0 10px;
   border-radius: 10px;
-  margin-left: -13%;
   cursor: pointer;
 }
 .bt-switch-com:hover {
