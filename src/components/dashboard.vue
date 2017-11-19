@@ -84,7 +84,7 @@ export default {
         columns: ['name', 'sex', 'age'],
         type: {
           name: 'text',
-          sex: 'radio',
+          sex: 'text',
           age: 'text'
         },
         values: [
