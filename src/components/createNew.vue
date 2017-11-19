@@ -6,13 +6,9 @@
     <!-- popup form -->
     <div class="pop-up-bg" v-show="ifPopUp" >
       <form class="pop-up">
-      <div class="pop-up-item">
-        <label for="title">Title:</label>
-        <input type="text" id="title" class="input-title" v-model="newListEle.title">
-      </div>
-      <div class="pop-up-item">
-        <label for="picture">Picutre:</label>
-        <input type="file" id="picture">
+      <div class="pop-up-item" v-for="(value,key,index) in elemKeysType">
+        <label>{{key}}:</label>
+        <input :id="key" :type="value" class="input-title" :value="newEle[key]" v-on:input="onInput(key, $event.target.value)">
       </div>
       <div class="bt-container">
         <button class="bt-submit" @click.prevent="submit">确定</button> 
@@ -26,44 +22,57 @@
 <script>
 export default {
   name: 'createNew',
+  props: ['elemKeysType'],
   data () {
     return {
-      ifPopUp: false,
-      newListEle: {
-        title: '',
-        imgSrc: require('../assets/lemon.jpg')
-      }
+      ifPopUp: false
+    }
+  },
+  computed: {
+    newEle () {
+      let obj = {}
+      let arr = Object.keys(this.elemKeysType)
+      console.log('obj', this.elemKeysType)
+      console.log('arr', arr)
+      arr.forEach(function (ele) {
+        obj[ele] = ''
+      })
+      return obj
     }
   },
   methods: {
+    onInput (key, val) {
+      this.$set(this.newEle, key, val)
+    },
     createNew () {
       this.ifPopUp = true           // pop up show
-      this.newListEle.title = ''              
-      console.log('create')
+      // reset input
+      for (let key in this.newEle) {
+        this.newEle[key] = ''
+      }
+      // console.log('create')
     },
     submit () {
-      // if input title is null then focus the input
-      if (!this.newListEle.title) {
-        document.getElementById('title').focus()
+      for (let key in this.newEle) {
+        // console.log('inputVal',this.newEle[key])
+        if (!this.newEle[key] && key !== 'imgSrc') {
+          document.getElementById(key).focus()
+          return
+        }
       }
-      else{
-        this.ifPopUp = false
-        this.$store.commit('addListItem', this.newListEle)
-        this.$store.commit('updateShowList');                          
-        console.log('submit')
-      } 
+      this.ifPopUp = false
+      let newEle = JSON.parse(JSON.stringify(this.newEle))
+      this.$emit('add-item', newEle)
     },
     cancel () {
-        this.ifPopUp = false      
+      this.ifPopUp = false
     }
   }
 }
 </script>
 
-<style scope>
+<style scoped>
 .bt-createnew {
-  /* margin-right: 10%; */
-  /* margin-left: 10%; */
   cursor: pointer;
 }
 .pop-up-bg {
@@ -73,12 +82,13 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 .pop-up {
   position: fixed;
   top: 50%;
   left: 50%;
-  padding: 3rem 2rem 1rem;  
+  padding: 3rem 4rem 1rem 3rem; 
   transform: translate(-50%,-50%);
   background: white;
   /* border: 1px solid #b0ced8; */
@@ -86,14 +96,15 @@ export default {
   box-sizing: border-box;
 }
 .pop-up-item {
-  margin-bottom: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 .pop-up label {
   margin-right: 5px;
 }
 .input-title {
   border: 1px solid gray;
-  /* border-style: none; */
 }
 .bt-container {
   text-align: right;

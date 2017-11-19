@@ -4,7 +4,7 @@
       <li class="bt-pre bt" @click="prePage"><span></span></li>
       <li class="cur-page">{{curPage}}</li>
       <li>/</li>      
-      <li class="total-pages">{{totalPages}}</li>
+      <li class="total-pages">{{totalPage}}</li>
       <li class="bt-next bt" @click="nextPage"><span></span></li>
     </ul> 
   </div>
@@ -13,37 +13,38 @@
 <script>
 export default {
   name: 'pageNumber',
-  data () {
-    return {
-      // showListNum: 3
+  props: {
+    curPage: {
+      type: Number,
+      default: 1
+    },
+    totalPage: {
+      type: Number,
+      default: 1
     }
   },
-  computed: {
-    curPage () {
-      return this.$store.getters.getCurPage
-    },
-    totalPages () {
-      return Math.ceil(this.$store.getters.getList.length / this.$store.getters.getShowListNum)
+  data () {
+    return {
     }
   },
   methods: {
     prePage () {
       if (this.curPage > 1) {
-        this.$store.commit('minusCurPage')
-        this.$store.commit('updateShowList')              
+        // console.log('previous page')
+        this.$emit('pre-page')
       }
     },
     nextPage () {
-      if (this.curPage < this.totalPages){
-        this.$store.commit('addCurPage') 
-        this.$store.commit('updateShowList')                          
+      if (this.curPage < this.totalPage) {
+        // console.log('next page')
+        this.$emit('next-page')
       }
     }
   }
 }
 </script>
 
-<style scope>
+<style scoped>
 .page-number ul {
   display: flex;
 }

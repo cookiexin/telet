@@ -1,7 +1,7 @@
 <template>
   <div class="list-container">
     <ul>
-      <li class="list-item" v-for="(item,index) in showListData">
+      <li class="list-item" v-for="(item,index) in values">
         <h3 class="list-item-title">{{item.title}}</h3>
         <img class="list-item-img" :src="item.imgSrc" alt="">
       </li>
@@ -12,29 +12,15 @@
 <script>
 export default {
   name: 'lists',
+  props: ['displayNum', 'values'],
   data () {
     return {
-      pagePerNum: 3,
-      lists: []
     }
-  },
-  computed: {
-    listData () {
-      return this.$store.getters.getList
-    },
-    showListData () {
-      return this.$store.getters.getShowList
-    }
-  },
-  mounted () {
-    this.$store.commit('initList')    
-    this.$store.commit('updateShowList')
-    console.log(this.$store)
   }
 }
 </script>
 
-<style scope>
+<style scoped>
 .list-container {
   margin-top: 1rem;
   /* min-height: 280px; */
